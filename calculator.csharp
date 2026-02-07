@@ -1,0 +1,41 @@
+using System;
+
+public class Calculator
+{
+    public static void Main(string[] args)
+    {
+        int num1, num2;
+        char operation;
+        bool validInput;
+
+        while (true)
+        {
+            Console.WriteLine("Input first number (Integer): ");
+            validInput = int.TryParse(Console.ReadLine(), out num1);
+            if (!validInput)
+            {
+                Console.WriteLine("Invalid input. Please enter an integer.");
+                continue;
+            }
+
+            Console.WriteLine("Input second number (Integer): ");
+            validInput = int.TryParse(Console.ReadLine(), out num2);
+            if (!validInput)
+            {
+                Console.WriteLine("Invalid input. Please enter an integer.");
+                continue;
+            }
+
+            Console.WriteLine("\nPlease enter an Operator (+, -, *, /, %, =): ");
+            operation = Console.ReadKey().KeyChar;
+            Console.WriteLine(); 
+            
+            if (operation == '=')
+            {
+                Console.WriteLine("Program terminated.");
+                break;
+            }
+
+            Calculate(num1, num2, operation);
+        }
+    }
