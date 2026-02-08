@@ -1,41 +1,107 @@
 using System;
 
-public class Calculator
+class Program
 {
     public static void Main(string[] args)
     {
-        int num1, num2;
-        char operation;
-        bool validInput;
+        bool isRunning = true;
 
-        while (true)
+        while (isRunning)
         {
-            Console.WriteLine("Input first number (Integer): ");
-            validInput = int.TryParse(Console.ReadLine(), out num1);
-            if (!validInput)
+            int num1, num2;
+
+            while (true)
             {
-                Console.WriteLine("Invalid input. Please enter an integer.");
-                continue;
+                Console.Write("Enter first number: ");
+                if (int.TryParse(Console.ReadLine(), out num1))
+                    break;
+
+                Console.WriteLine("Invalid input. Please enter a whole number.");
             }
 
-            Console.WriteLine("Input second number (Integer): ");
-            validInput = int.TryParse(Console.ReadLine(), out num2);
-            if (!validInput)
+            while (true)
             {
-                Console.WriteLine("Invalid input. Please enter an integer.");
-                continue;
+                Console.Write("Enter second number: ");
+                if (int.TryParse(Console.ReadLine(), out num2))
+                    break;
+
+                Console.WriteLine("Invalid input. Please enter a whole number.");
             }
 
-            Console.WriteLine("\nPlease enter an Operator (+, -, *, /, %, =): ");
-            operation = Console.ReadKey().KeyChar;
-            Console.WriteLine(); 
-            
-            if (operation == '=')
+            char operation;
+            bool validOperation = false;
+
+            while (!validOperation)
             {
-                Console.WriteLine("Program terminated.");
-                break;
+                Console.Write("Choose operation (+, -, *, /, %, =): ");
+                if (!char.TryParse(Console.ReadLine(), out operation))
+                {
+                    Console.WriteLine("Incorrect Operation Used, please try again");
+                    continue;
+                }
+
+                if (operation == '+' || operation == '-' || operation == '*' ||
+                    operation == '/' || operation == '%' || operation == '=')
+                {
+                    validOperation = true;
+
+                    var result = Calculate(num1, num2, operation);
+
+                    if (operation == '=')
+                    {
+                        isRunning = false;
+                        break;
+                    }
+
+                    if (result != null)
+                        Console.WriteLine("Result: " + result);
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect Operation Used, please try again");
+                }
             }
 
-            Calculate(num1, num2, operation);
+            Console.WriteLine();
+        }
+
+        Console.WriteLine("Program terminated.");
+    }
+
+    public static object? Calculate(int num1, int num2, char operation)
+    {
+        switch (operation)
+        {
+            case '+':
+                return num1 + num2;
+
+            case '-':
+                return num1 - num2;
+
+            case '*':
+                return num1 * num2;
+
+            case '/':
+                if (num2 == 0)
+                {
+                    Console.WriteLine("Cannot divide by zero");
+                    return null;
+                }
+                return (double)num1 / num2;
+
+            case '%':
+                if (num2 == 0)
+                {
+                    Console.WriteLine("Cannot modulo by zero");
+                    return null;
+                }
+                return num1 % num2;
+
+            case '=':
+                return null;
+
+            default:
+                return null;
         }
     }
+}
